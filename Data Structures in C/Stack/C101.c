@@ -1,55 +1,79 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// IMPLEMENTING STACK USING SINGLY LINKED LIST
+// IMPLEMENTING STACK USING DYNAMIC ARRAYS
 
-struct Node
+struct Stack
 {
-    int value;
-    struct Node *next;
+    int *arr;
+    int size;
+    int actualSize;
+    int *head;
 };
 
-typedef struct Node Node;
+typedef struct Stack Stack;
 
+int findActualSize(int size) {
+    int n = 2;
+    while (n <= size) n *= 2;
+    return n;
+}
 
-void printList(Node *head) {
-    printf("head -> ");
-    Node *temp = head;
-    while (temp != NULL) {
-        printf("%i -> ", temp->value);
-        temp = temp->next;
+void initializeStack(Stack *stack) {
+    stack->actualSize = findActualSize(stack->size);
+    stack->arr = malloc((stack->actualSize) * sizeof(int));
+    for (int i = 0; i < stack->size; i++) {
+        stack->arr[i] = i;
     }
-    free(temp);
-    printf("null\n");
+    stack->head = &((stack->arr)[(stack->size)-1]);
+
+    printf("Size: %i, Actual Size: %i\n", stack->size, stack->actualSize);
 }
 
-Node *createNode(int value, Node *prev) {
-    Node *temp = malloc(sizeof(Node));
-    temp->value = value;
-    if (prev != NULL) prev->next = temp;
-    temp->next = NULL;
-    return temp;
+void printStack(Stack *stack) {
+    for (int i = 0; i < stack->size; i++) {
+        printf("%i > ", stack->arr[i]);
+    }
+    printf("head\n");
+    printf("Size: %i, Actual Size: %i\n", stack->size, stack->actualSize);
+    printf("\n");
 }
 
-void push(Node *newhead, Node **head) {
-    newhead->next = *head;
-    *head = newhead;
+void push(Stack *stack, int value) {
+    if ((stack->size)+1 >= (stack->actualSize)) { // If we are running out of size, double it
+        (stack->actualSize) *= 2;
+        (stack->arr) = realloc((stack->arr), ((stack->actualSize)) * sizeof(int));
+    }
+    (stack->arr)[(stack->size)++] = value;
 }
 
-void pop(Node **head) {
-    Node *temp = (*head);
-    (*head) = (*head)->next;
-    free(temp);
+void pop(Stack *stack) {
+    if ((stack->size) < (stack->actualSize) / 2) {
+        (stack->actualSize) /= 2;
+        stack->arr = realloc((stack->arr), ((stack->actualSize)) * sizeof(int));
+    }
+    (stack->arr)[--(stack->size)] = 0;
 }
 
 int main() {
-    Node *head = createNode(16, NULL);
-    Node *tail = createNode(25, head);
-    push(createNode(9, NULL), &head);
-    push(createNode(4, NULL), &head);
-    push(createNode(1, NULL), &head);
+    Stack stack;
+    stack.size = 10;
+    initializeStack(&stack);
 
-    pop(&head);
-
-    printList(head);
+    printStack(&stack);
+    push(&stack, 10);
+    push(&stack, 11);
+    push(&stack, 12);
+    printStack(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    push(&stack, 19);
+    push(&stack, 29);
+    printStack(&stack);
 }
