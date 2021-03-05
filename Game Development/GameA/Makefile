@@ -14,4 +14,4 @@ $(target) : $(objs)
 	$(CC) -c $< 
 
 clean:
-	del $(objs) $(target)
+	del $(objs)
