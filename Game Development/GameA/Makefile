@@ -1,9 +1,9 @@
-target := bin\main.exe
-objs := src\main.o src\utility\gameStateManager.o
-deps := src\gameStateManager.h
+target := bin/main.exe
+objs := src/main.o src/utility/gameStateManager.o
+deps := src/gameStateManager.h
 
 CC := gcc
-LIBSDL := -I"C:\libsdl\include" -L"C:\libsdl\lib" -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+LIBSDL := -I"C:/libsdl/include" -L"C:/libsdl/lib" -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 all: $(target)
 
